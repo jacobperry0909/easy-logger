@@ -1,5 +1,5 @@
 {
-  "name": "easy-logger",
+  "name": "ezloggerpro",
   "version": "1.0.0",
   "description": "A tool to make logging in your app quick and easy",
   "main": "src/index.js",
