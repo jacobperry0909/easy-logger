@@ -2,7 +2,7 @@
   "name": "easy-logger",
   "version": "1.0.0",
   "description": "A tool to make logging in your app quick and easy",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,9 +16,12 @@
     "logger"
   ],
   "author": "Jacob Perry",
-  "license": "ISC",
+  "license": "GNU",
   "bugs": {
     "url": "https://github.com/jacobperry0909/easy-logger/issues"
   },
-  "homepage": "https://github.com/jacobperry0909/easy-logger#readme"
+  "homepage": "https://github.com/jacobperry0909/easy-logger#readme",
+  "dependencies": {
+    "colors": "^1.4.0"
+  }
 }
