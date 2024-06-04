@@ -1,27 +1,27 @@
 {
-  "name": "ezloggerpro",
-  "version": "1.0.0",
-  "description": "A tool to make logging in your app quick and easy",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jacobperry0909/easy-logger.git"
-  },
-  "keywords": [
-    "log",
-    "logging",
-    "logger"
-  ],
-  "author": "Jacob Perry",
-  "license": "GNU",
-  "bugs": {
-    "url": "https://github.com/jacobperry0909/easy-logger/issues"
-  },
-  "homepage": "https://github.com/jacobperry0909/easy-logger#readme",
-  "dependencies": {
-    "colors": "^1.4.0"
-  }
+	"name": "ezloggerpro",
+	"version": "1.1.0",
+	"description": "A tool to make logging in your app quick and easy",
+	"main": "src/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jacobperry0909/easy-logger.git"
+	},
+	"keywords": [
+		"log",
+		"logging",
+		"logger"
+	],
+	"author": "Jacob Perry",
+	"license": "GNU",
+	"bugs": {
+		"url": "https://github.com/jacobperry0909/easy-logger/issues"
+	},
+	"homepage": "https://github.com/jacobperry0909/easy-logger#readme",
+	"dependencies": {
+		"colors": "^1.4.0"
+	}
 }
