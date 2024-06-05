@@ -1,6 +1,6 @@
 {
 	"name": "ezloggerpro",
-	"version": "1.1.0",
+	"version": "1.2.3",
 	"description": "A tool to make logging in your app quick and easy",
 	"main": "src/index.js",
 	"scripts": {
