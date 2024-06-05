@@ -3,14 +3,54 @@
  *  @param {boolean} useConsole - whether or not to log using the console. Does not affect other output destinations
  * @param {object} customCodes - overwrite or add new codes to the logger
  */
+
 const colors = require('colors');
+const fs = require('fs');
+
 const codes = require('./codes.json');
+
+let logBuffer = []; // Buffer to accumulate log entries
+
+async function logToJson(path, { Timestamp, Code, short, msg, logAmount }) {
+	const newObject = { Timestamp, Code, short, msg };
+	logBuffer.push(newObject);
+
+	// Check if the logBuffer size has reached the logAmount
+	if (logBuffer.length >= logAmount) {
+		try {
+			let jsonData = [];
+
+			// Read existing data from the file
+			const existingData = await fs.promises.readFile(path, 'utf8');
+			jsonData = JSON.parse(existingData);
+
+			// Concatenate the accumulated logs with the existing data
+			jsonData = jsonData.concat(logBuffer);
+
+			// Write the combined logs to the file
+			await fs.promises.writeFile(path, JSON.stringify(jsonData), 'utf8');
+			console.log(colors.bgWhite('Logs have been saved'));
+		} catch (err) {
+			console.error(colors.bgRed('Error saving logs:'), err);
+		}
+
+		// Clear the logBuffer after writing to the file
+		logBuffer = [];
+	}
+}
+
 class Logger {
 	constructor(useColors, useConsole) {
 		this.useColors = useColors || true;
 		this.useConsole = useConsole || true;
 		this.customCodes = {};
 		this.useShortOnly = true;
+		this.jsonConfig = {
+			useJson: true,
+			autoCreateJsonFile: true,
+			jsonPath: null,
+			logAmount: 1,
+		};
 	}
 
 	createTimeStamp() {
@@ -32,7 +72,7 @@ class Logger {
 		}
 	}
 
-	logCode({ code, msg }) {
+	async logCode({ code, msg }) {
 		if (!code)
 			throw new Error(
 				'Must provide either a custom code, or a http code found on https://developer.mozilla.org/en-US/docs/Web/HTTP/Status'
@@ -40,7 +80,6 @@ class Logger {
 		if (typeof code !== 'string') {
 			code = `${code}`;
 		}
-		let finalOutput = '';
 		let color;
 		let foundCode;
 		for (const key in this.customCodes) {
@@ -59,7 +98,13 @@ class Logger {
 		}
 
 		if (msg) {
-			console.log(colors[color](`[${code}] - ${foundCode.short} | ${msg}`));
+			console.log(
+				colors[color](
+					`[${code}] - [${this.createTimeStamp()}] - ${
+						foundCode.short
+					} | ${msg}`
+				)
+			);
 		} else {
 			console.log(
 				colors[color](
@@ -69,6 +114,14 @@ class Logger {
 				)
 			);
 		}
+
+		await logToJson({
+			Timestamp: `${this.createTimeStamp()}`,
+			Code: code,
+			short: foundCode.short,
+			msg: msg ? msg : null,
+			logAmount: this.jsonConfig.logAmount,
+		});
 	}
 	addCustomCode(code, name, msg, color) {
 		if (!code || !name || !msg)
@@ -87,8 +140,10 @@ const logger = new Logger();
 // testing ↴
 
 logger.addCustomCode('701', 'test', 'testing', 'blue');
-logger.logCode({ code: '701', msg: 'Testing' });
-logger.logCode({ code: '200', msg: 'Success' });
-logger.logCode({ code: '400' });
+(async () => {
+	await logger.logCode({ code: '701', msg: 'Testing' });
+	await logger.logCode({ code: '200', msg: 'Success' });
+	await logger.logCode({ code: '400' });
+})();
 
 module.exports = logger;
